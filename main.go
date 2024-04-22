@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/witnessbro/go-url-shortener/handler"
+	"github.com/witnessbro/go-url-shortener/store"
 )
 
 func main() {
@@ -13,6 +15,15 @@ func main() {
 		})
 	})
 
+	r.POST("/create-short-url", func(c *gin.Context) {
+		handler.CreateShortUrl(c)
+	})
+
+	r.GET("/:shortUrl", func(c *gin.Context) {
+		handler.HandleShortUrlRedirect(c)
+	})
+
+	store.InitializeStore()
 	err := r.Run("localhost:8080")
 	if err != nil {
 		panic(fmt.Sprintf("Failed to start the web server - Error: %v", err))
